@@ -36,7 +36,7 @@ namespace Crowseer
         public static string BoxButton = "BOX ESP: ON";
         public static List<GameObject> badguys = new List<GameObject>();
         public static GameObject clientManager;
-        public static GameObject objects;
+        public static Transform objects;
         public static Color AmbientColor = Color.white;
         public static Shader DefaultShader;
         public string Shit1;
@@ -104,7 +104,7 @@ namespace Crowseer
             else Button1 = MenuItemStyle;
 
             GUIStyle Button2;
-            if (nameToAdd == "Remote_Player") Button2 = ActiveMenuItemStyle;
+            if (nameToAdd == "RemotePlayer") Button2 = ActiveMenuItemStyle;
             else Button2 = MenuItemStyle;
 
             GUIStyle Button3;
@@ -126,7 +126,7 @@ namespace Crowseer
             if (GUI.Button(new Rect(20, 60, 140, 20), "Players", Button2))
             {
                 badguys.Clear();
-                nameToAdd = "Remote_Player";
+                nameToAdd = "RemotePlayer";
             }
             if (GUI.Button(new Rect(20, 80, 140, 20), "Both", Button3))
             {
@@ -222,7 +222,7 @@ namespace Crowseer
         void Update()
         {
             clientManager = GameObject.Find("ClientManager");
-            objects = clientManager.transform.GetChild(0).gameObject;
+            objects = clientManager.transform.GetChild(0);
 
             /////////MENU HOTKEY////////////
             if (Input.GetKeyDown(KeyCode.Insert)) menu = !menu;
@@ -235,10 +235,11 @@ namespace Crowseer
                     one -= -1;
                     if (one == two - 1)
                     {
+
                         List<Transform> allChildren = GetComponentsInChildren<Transform>().ToList();
                         List<GameObject> allChildGOs = new List<GameObject>();
 
-                        foreach (Transform trans in allChildren)
+                        foreach (Transform trans in objects)
                         {
                             allChildGOs.Add(trans.gameObject);
                         }
