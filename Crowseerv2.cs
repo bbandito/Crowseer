@@ -36,7 +36,7 @@ namespace Crowseer
         public static string BoxButton = "BOX ESP: ON";
         public static List<GameObject> badguys = new List<GameObject>();
         public static GameObject clientManager;
-        public static Transform objects;
+        public static GameObject objects;
         public static Color AmbientColor = Color.white;
         public static Shader DefaultShader;
         public string Shit1;
@@ -221,41 +221,42 @@ namespace Crowseer
 
         void Update()
         {
-            clientManager = GameObject.Find("ClientManager");
-            objects = clientManager.transform.GetChild(0);
-            List<GameObject> noGrandChildObjList = new List<GameObject>();
+            
             /////////MENU HOTKEY////////////
             if (Input.GetKeyDown(KeyCode.Insert)) menu = !menu;
 
             ////////////////ENEMY LIST UPDATE/////////
             try
             {
-                if (one <= two)
+                clientManager = GameObject.Find("ClientManager");
+                if (clientManager != null)
                 {
-                    one -= -1;
-                    if (one == two - 1)
+                    objects = clientManager.transform.GetChild(0).gameObject;
+                    if (objects != null)
                     {
-
-                        foreach (GameObject obj in objects)
+                        if (one <= two)
                         {
-                            GameObject child = obj.transform.GetChild(0).gameObject;
-                            if (child != null)
+                            one -= -1;
+                            if (one == two - 1)
                             {
-                                noGrandChildObjList.Add(child);
+                                List<GameObject> _childObjects = new List<GameObject>();
+                                for (int cnt = 0; cnt <= objects.transform.childCount; cnt++)
+                                {
+                                    _childObjects.Add(objects.transform.GetChild(cnt).gameObject);
+                                }
+                                foreach (GameObject go in _childObjects)
+                                {
+                                    CheckObject(go);
+                                }
+                               // _childObjects.Clear();
                             }
                         }
-
-                        foreach (GameObject go in noGrandChildObjList)
-                        {
-                            CheckObject(go);
-                        }
                     }
-                }
-                if (one <= 0)
-                {
-                    badguys.Clear();
-                    noGrandChildObjList.Clear();
-                    one = two;
+                    if (one <= 0)
+                    {
+                        badguys.Clear();
+                        one = two;
+                    }
                 }
             }
             catch { }
@@ -313,13 +314,13 @@ namespace Crowseer
         {
             if (nameToAdd == "NPC")
             {
-                if (go.name.Contains("King") || go.name.Contains("Captain"))
-                {
+                //if (go.name.Contains("King") || go.name.Contains("Captain"))
+               // {
                     if (!badguys.Contains(go))
                     {
                         badguys.Add(go);
                     }
-                }
+               // }
             }
             else if (nameToAdd == "RemotePlayer")
             {
